@@ -6,17 +6,31 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/tesselle/alkahest/workflows/R-CMD-check/badge.svg)](https://github.com/tesselle/alkahest/actions)
-[![codecov](https://codecov.io/gh/tesselle/alkahest/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tesselle/alkahest)
+[![codecov](https://codecov.io/gh/tesselle/alkahest/branch/main/graph/badge.svg?token=wsIkAQ0XFK)](https://app.codecov.io/gh/tesselle/alkahest)
 [![CodeFactor](https://www.codefactor.io/repository/github/tesselle/alkahest/badge/main)](https://www.codefactor.io/repository/github/tesselle/alkahest/overview/main)
 [![Dependencies](https://tinyverse.netlify.com/badge/alkahest)](https://cran.r-project.org/package=alkahest)
 
 <a href="https://tesselle.r-universe.dev" class="pkgdown-devel"><img
 src="https://tesselle.r-universe.dev/badges/alkahest"
 alt="r-universe" /></a>
+<a href="https://cran.r-project.org/package=alkahest"
+class="pkgdown-release"><img
+src="http://www.r-pkg.org/badges/version/alkahest"
+alt="CRAN Version" /></a> <a
+href="https://cran.r-project.org/web/checks/check_results_alkahest.html"
+class="pkgdown-release"><img
+src="https://badges.cranchecks.info/worst/alkahest.svg"
+alt="CRAN checks" /></a>
+<a href="https://cran.r-project.org/package=alkahest"
+class="pkgdown-release"><img
+src="http://cranlogs.r-pkg.org/badges/alkahest"
+alt="CRAN Downloads" /></a>
 
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7081524.svg)](https://doi.org/10.5281/zenodo.7081524)
 <!-- badges: end -->
 
 ## Overview
@@ -58,11 +72,8 @@ vectors).
 ## X-ray diffraction
 data("XRD")
 
-## Whittaker smoothing
-smooth <- smooth_whittaker(XRD, lambda = 1000, d = 2, sparse = TRUE)
-
 ## 4S Peak Filling baseline
-baseline <- baseline_peakfilling(smooth, n = 10, m = 5, by = 10)
+baseline <- baseline_peakfilling(XRD, n = 10, m = 5, by = 10, sparse = TRUE)
 
 plot(XRD, type = "l", xlab = expression(2*theta), ylab = "Count")
 lines(baseline, type = "l", col = "red")

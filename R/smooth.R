@@ -213,3 +213,110 @@ setMethod(
                          sparse = sparse)
   }
 )
+
+# Penalized likelihood smoothing ===============================================
+#' @export
+#' @rdname smooth_likelihood
+#' @aliases smooth_likelihood,numeric,numeric-method
+setMethod(
+  f = "smooth_likelihood",
+  signature = signature(x = "numeric", y = "numeric"),
+  definition = function(x, y, lambda, d = 2, SE = FALSE,
+                        progress = interactive()) {
+
+    if (!requireNamespace("Matrix", quietly = TRUE)) {
+      msg <- "The Matrix package is required. Please install it."
+      stop(msg, call. = FALSE)
+    }
+
+    m <- length(y)
+    n <- length(lambda)
+
+    aic <- rep(0, n)
+    mu <- matrix(data = 0, nrow = m, ncol = n)
+    se <- matrix(data = 0, nrow = m, ncol = n)
+    res <- matrix(data = 0, nrow = m, ncol = n)
+
+    if (progress) pb <- utils::txtProgressBar(min = 0, max = n, style=3)
+
+    n_lambda <- seq_len(n)
+    for (i in n_lambda) {
+      like <- penalized_likelihood(y, lambda = lambda[i], d = d, SE = SE)
+
+      aic[i] <- like$aic
+      mu[, i] <- like$mu
+      se[, i] <- like$se
+      res[, i] <- like$res
+
+      if (progress) utils::setTxtProgressBar(pb, i)
+    }
+
+    if (progress) close(pb)
+
+    k <- which.min(aic)
+    mu <- mu[, k]
+    se <- se[, k]
+    res <- res[, k]
+    op_lambda <- lambda[k]
+    op_aic <- aic[k]
+
+    xy <- list(x = x, y = mu, aic = aic, se = se, residuals = res,
+               optimal_aic = op_aic, optimal_lambda = op_lambda)
+    attr(xy, "method") <- "penalized likelihood smoothing"
+    xy
+  }
+)
+
+#' @export
+#' @rdname smooth_likelihood
+#' @aliases smooth_likelihood,ANY,missing-method
+setMethod(
+  f = "smooth_likelihood",
+  signature = signature(x = "ANY", y = "missing"),
+  definition = function(x, lambda, d = 2, SE = FALSE,
+                        progress = interactive()) {
+    xy <- grDevices::xy.coords(x)
+    methods::callGeneric(x = xy$x, y = xy$y, lambda = lambda, d = d,
+                         SE = SE, progress = progress)
+  }
+)
+
+penalized_likelihood <- function(y, lambda, d = 2, SE = FALSE) {
+
+  m <- length(y)
+  z <- log(y + 1)
+  E <- Matrix::Diagonal(m)
+  D <- Matrix::diff(E, differences = d)
+  P <- lambda * Matrix::crossprod(D, D)
+  mu <- exp(z)
+
+  delta_mu <- 1
+  limit <- 1 # Stop condition to prevent infinite loop
+  while (delta_mu >= 0.0001 & limit <= 10) {
+    W <- Matrix::Diagonal(x = mu)
+    z <- Matrix::solve(W + P, y - mu + mu * z)
+    new_mu <- exp(as.numeric(z)) # Drop S4 class
+    delta_mu <- max(abs(new_mu - mu))
+    mu <- new_mu
+
+    limit <- limit + 1
+  }
+
+  ## AIC
+  H <- Matrix::solve(W + P) %*% W
+  ed <- sum(Matrix::diag(H))
+  dev <- 2 * sum(y * log((y + 1e-10) / mu))
+  aic <- dev + 2 * ed * m / (m - ed)
+
+  ## Standard error
+  se <- rep(NA_real_, m)
+  if (isTRUE(SE)) {
+    HH <- Matrix::tcrossprod(H %*% W, H)
+    se <- sqrt(Matrix::diag(HH))
+  }
+
+  ## Standardized residuals for counts
+  res <- (y - mu) / sqrt(mu)
+
+  list(mu = mu, aic = aic, se = se, res = res)
+}
