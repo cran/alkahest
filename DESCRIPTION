@@ -1,6 +1,6 @@
 Package: alkahest
 Title: Pre-Processing XY Data from Experimental Methods
-Version: 1.1.0
+Version: 1.1.1
 Authors@R: c(
     person("Nicolas", "Frerebeau", , "nicolas.frerebeau@u-bordeaux-montaigne.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5759-4944", affiliation = "Université Bordeaux Montaigne")),
@@ -29,13 +29,14 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
-Collate: 'AllGenerics.R' 'alkahest-package.R' 'baseline.R' 'data.R'
-        'helpers.R' 'integrate.R' 'peaks.R' 'replace.R' 'resample.R'
-        'rescale.R' 'signal.R' 'smooth.R' 'windows.R' 'xrd.R'
+Collate: 'AllGenerics.R' 'alkahest-internal.R' 'alkahest-package.R'
+        'baseline.R' 'data.R' 'integrate.R' 'peaks.R' 'replace.R'
+        'resample.R' 'rescale.R' 'signal.R' 'smooth.R' 'windows.R'
+        'xrd.R'
 NeedsCompilation: no
-Packaged: 2023-05-18 08:52:10 UTC; nicolas
+Packaged: 2023-06-13 07:35:59 UTC; nicolas
 Author: Nicolas Frerebeau [aut, cre] (<https://orcid.org/0000-0001-5759-4944>,
     Université Bordeaux Montaigne),
   Brice Lebrun [ctb] (<https://orcid.org/0000-0001-7503-8685>)
 Repository: CRAN
-Date/Publication: 2023-05-18 09:10:02 UTC
+Date/Publication: 2023-06-13 07:50:02 UTC

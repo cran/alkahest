@@ -1,3 +1,8 @@
+# alkahest 1.1.1
+
+## Bugfixes & changes
+* Follow changes in **Matrix** 1.6-0 (`Matrix::solve(a=<Matrix>, b=<vector>)` returns a vector).
+
 # alkahest 1.1.0
 ## New classes and methods
 * Add penalized likelihood smoothing (de Rooi et al. 2014).
