@@ -10,6 +10,7 @@ setMethod(
   f = "baseline_linear",
   signature = c(x = "numeric", y = "numeric"),
   definition = function(x, y, points = range(x)) {
+    assert_length(y, length(x))
 
     ## Find the nearest value
     z <- vapply(X = points, FUN = function(i, x) which_nearest(x, i),
@@ -49,6 +50,7 @@ setMethod(
   f = "baseline_polynomial",
   signature = c(x = "numeric", y = "numeric"),
   definition = function(x, y, d = 3, tolerance = 0.001, stop = 100) {
+    assert_length(y, length(x))
 
     polynom <- cbind(1 / sqrt(length(x)), stats::poly(x, degree = d))
 
@@ -65,7 +67,7 @@ setMethod(
       old_y <- new_y
       start <- start + 1
       if (start >= stop) {
-        warning("Convergence not reached (possible infinite loop).", call. = FALSE)
+        warning("Convergence not reached.", call. = FALSE)
         break
       }
     }
@@ -97,8 +99,10 @@ setMethod(
   f = "baseline_rollingball",
   signature = c(x = "numeric", y = "numeric"),
   definition = function(x, y, m, s) {
-    ## Windows
     n <- length(x)
+    assert_length(y, n)
+
+    ## Windows
     win_minmax <- window_sliding(n, m)
     win_smooth <- window_sliding(n, s)
 
@@ -158,6 +162,7 @@ setMethod(
   f = "baseline_rubberband",
   signature = c(x = "numeric", y = "numeric"),
   definition = function(x, y, noise = 0, spline = TRUE, ...) {
+    assert_length(y, length(x))
 
     ## (chull returns points in clockwise order)
     pts <- grDevices::chull(x, y)
@@ -215,6 +220,8 @@ setMethod(
   f = "baseline_snip",
   signature = c(x = "numeric", y = "numeric"),
   definition = function(x, y, LLS = FALSE, decreasing = FALSE, n = 100) {
+    assert_length(y, length(x))
+
     ## LLS operator
     y <- if (LLS) LLS(y) else y
 
@@ -270,6 +277,60 @@ inverseLLS <- function(x) {
   (exp(exp(x) - 1) - 1)^2 - 1
 }
 
+# AsLS =========================================================================
+#' @export
+#' @rdname baseline_asls
+#' @aliases baseline_asls,numeric,numeric-method
+setMethod(
+  f = "baseline_asls",
+  signature = c(x = "numeric", y = "numeric"),
+  definition = function(x, y, p = 0.01, lambda = 10^4, stop = 100) {
+    assert_Matrix()
+    assert_length(y, length(x))
+
+    m <- length(y)
+    E <- Matrix::Diagonal(m)
+    D <- Matrix::diff(E, lag = 1, differences = 2)
+
+    w <- rep(1, m) # weights
+
+    start <- 0
+    convergence <- FALSE
+    while (!convergence) {
+      W <- Matrix::Diagonal(x = w)
+      C <- Matrix::chol(W + (lambda * Matrix::t(D) %*% D))
+      z <- Matrix::solve(C, Matrix::solve(Matrix::t(C), w * y))
+      ## Prior to v1.6, Matrix::solve(a=<Matrix>, b=<vector>) returns a matrix
+      z <- as.numeric(z)
+      w0 <- p * (y > z) + (1 - p) * (y < z)
+      if (isTRUE(all.equal(w, w0))) convergence <- TRUE
+
+      w <- w0
+      start <- start + 1
+      if (start >= stop) {
+        warning("Convergence not reached.", call. = FALSE)
+        break
+      }
+    }
+
+    xy <- list(x = x, y = z)
+    attr(xy, "method") <- "AsLS"
+    xy
+  }
+)
+
+#' @export
+#' @rdname baseline_asls
+#' @aliases baseline_asls,ANY,missing-method
+setMethod(
+  f = "baseline_asls",
+  signature = c(x = "ANY", y = "missing"),
+  definition = function(x, p = 0.01, lambda = 10^4, stop = 100) {
+    xy <- grDevices::xy.coords(x)
+    methods::callGeneric(x = xy$x, y = xy$y, lambda = lambda, p = p, stop = stop)
+  }
+)
+
 # Peak Filling =================================================================
 #' @export
 #' @rdname baseline_peakfilling
@@ -278,6 +339,8 @@ setMethod(
   f = "baseline_peakfilling",
   signature = c(x = "numeric", y = "numeric"),
   definition = function(x, y, n, m, by = 10, lambda = 1600, d = 2, sparse = FALSE) {
+    assert_length(y, length(x))
+
     ## Number of bucket intervals
     by <- length(x) / by
 

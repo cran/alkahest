@@ -1,5 +1,9 @@
-# alkahest 1.1.1
+# alkahest 1.2.0
+## New classes and methods
+* Add baseline estimation with asymmetric least squares smoothing (Eilers and Boelens, 2005).
+* Add Standard Normal Variate (SNV) transformation (Barnes et al., 1989).
 
+# alkahest 1.1.1
 ## Bugfixes & changes
 * Follow changes in **Matrix** 1.6-0 (`Matrix::solve(a=<Matrix>, b=<vector>)` returns a vector).
 

@@ -10,11 +10,8 @@ setMethod(
   signature = signature(x = "numeric", y = "numeric"),
   definition = function(x, y, lambda, wave = c(1.54060, 1.54443), tau = 0.5,
                         nseg = 1, progress = interactive()) {
-
-    if (!requireNamespace("Matrix", quietly = TRUE)) {
-      msg <- "The Matrix package is required. Please install it."
-      stop(msg, call. = FALSE)
-    }
+    assert_Matrix()
+    assert_length(y, length(x))
 
     ## Calculate doublet distance
     wl1 <- wave[1]
@@ -71,7 +68,7 @@ setMethod(
       mu[, i] <- M$mu
       phi[i] <- M$phi
       psi[i] <- M$psi
-      utils::setTxtProgressBar(pb, i)
+      if (progress) utils::setTxtProgressBar(pb, i)
     }
 
     if (progress) close(pb)

@@ -1,6 +1,34 @@
 # GENERIC METHODS
 
 # Baseline =====================================================================
+#' Asymmetric Least Squares Smoothing
+#'
+#' Baseline estimation with asymmetric least squares smoothing.
+#' @param x,y A [`numeric`] vector. If `y` is missing, an attempt is made to
+#'  interpret `x` in a suitable way (see [grDevices::xy.coords()]).
+#' @param p A length-one [`numeric`] vector giving the asymmetry
+#'  (\eqn{0.001 < p < 0.1} is a good choice for a signal with positive peaks).
+#' @param lambda A length-one [`numeric`] vector giving the smoothing parameter.
+#' @param stop An [`integer`] giving the stopping rule (i.e. maximum number of
+#'  iterations).
+#' @param ... Currently not used.
+#' @return
+#'  Returns a [`list`] with two components `x` and `y`.
+#' @references
+#'  Eilers, P. H. C. & Boelens, H. F. M. (2005). *Baseline Correction with
+#'  Asymmetric Least Squares Smoothing*.
+#' @seealso [signal_correct()]
+#' @example inst/examples/ex-baseline-asls.R
+#' @author P. H. C. Eilers and H. F. M. Boelens (original Matlab code)
+#' @docType methods
+#' @family baseline estimation methods
+#' @aliases baseline_asls-method
+setGeneric(
+  name = "baseline_asls",
+  def = function(x, y, ...) standardGeneric("baseline_asls"),
+  valueClass = "list"
+)
+
 #' Linear Baseline Estimation
 #'
 #' @param x,y A [`numeric`] vector. If `y` is missing, an attempt is made to
@@ -166,7 +194,7 @@ setGeneric(
 #'  interpret `x` in a suitable way (see [grDevices::xy.coords()]).
 #' @param n An [`integer`] value giving the number of iterations.
 #' @param m An odd [`integer`] giving the half window size.
-#' @param by A length-one [`numeric`] vector givging the umber of buckets to
+#' @param by A length-one [`numeric`] vector giving the umber of buckets to
 #'  divide `x` into.
 #' @param lambda An [`integer`] giving the smoothing parameter. The larger
 #'  `lambda` is, the smoother the curve (see [smooth_whittaker()]).
@@ -175,10 +203,12 @@ setGeneric(
 #' @param sparse A [`logical`] scalar: should sparse matrices be used for
 #'  computation (see [smooth_whittaker()])? If `TRUE`, \pkg{Matrix} is required.
 #' @param ... Currently not used.
-#' @seealso [signal_correct()], [smooth_whittaker()]
+#' @return
+#'  Returns a [`list`] with two components `x` and `y`.
 #' @references
 #'  Liland, K. H. (2015). 4S Peak Filling - baseline estimation by iterative
 #'  mean suppression. *MethodsX*, 2, 135-140. \doi{10.1016/j.mex.2015.02.009}.
+#' @seealso [signal_correct()], [smooth_whittaker()]
 #' @example inst/examples/ex-baseline-peakfilling.R
 #' @author N. Frerebeau
 #' @docType methods
@@ -527,19 +557,46 @@ setGeneric(
   valueClass = "list"
 )
 
+#' Standard Normal Variate (SNV) Transformation
+#'
+#' Subtracts the mean and scales to unit variance.
+#' @param x,y A [`numeric`] vector. If `y` is missing, an attempt is made to
+#'  interpret `x` in a suitable way (see [grDevices::xy.coords()]).
+#' @param ... Currently not used.
+#' @return
+#'  Returns a [`list`] with two components `x` and `y`.
+#' @references
+#'  Barnes, R. J., Dhanoa, M. S. & Lister, S. J. (1989). Standard Normal Variate
+#'  Transformation and De-Trending of Near-Infrared Diffuse Reflectance Spectra.
+#'  *Applied Spectroscopy*, 43(5): 772-777. \doi{10.1366/0003702894202201}.
+#' @example inst/examples/ex-normalize.R
+#' @author N. Frerebeau
+#' @docType methods
+#' @family normalization methods
+#' @aliases rescale_snv-method
+setGeneric(
+  name = "rescale_snv",
+  def = function(x, y, ...) standardGeneric("rescale_snv"),
+  valueClass = "list"
+)
+
 # Signal =======================================================================
 #' Baseline Correction
 #'
 #' @param x,y A [`numeric`] vector. If `y` is missing, an attempt is made to
 #'  interpret `x` in a suitable way (see [grDevices::xy.coords()]).
 #' @param method A [`character`] string specifying the method for baseline
-#'  estimation. It must be one of "`linear`", "`rubberband`", "`SNIP`" or "`4S`"
-#'  (see details). Any unambiguous substring can be given.
+#'  estimation (see details). Any unambiguous substring can be given.
 #' @param ... Extra arguments to be passed to `baseline_*()` (see details).
 #' @details
 #'  Available methods for baseline estimation:
 #'  \describe{
+#'   \item{`asls`}{Asymmetric Least Squares Smoothing (see [baseline_asls()]).}
 #'   \item{`linear`}{Linear baseline estimation (see [baseline_linear()]).}
+#'   \item{`polynomial`}{Polynomial baseline estimation (see
+#'   [baseline_polynomial()]).}
+#'   \item{`rollingball`}{Rolling ball baseline estimation (see
+#'   [baseline_rollingball()]).}
 #'   \item{`rubberband`}{Rubberband baseline estimation (see
 #'   [baseline_rubberband()]).}
 #'   \item{`SNIP`}{Sensitive Nonlinear Iterative Peak clipping algorithm
