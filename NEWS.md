@@ -1,3 +1,13 @@
+# alkahest 1.3.0
+## Enhancements
+* Translate into French.
+
+## Bugfixes & changes
+* Remove class check on value returned by generic function.
+
+## Internals
+* Update package metadata.
+
 # alkahest 1.2.0
 ## New classes and methods
 * Add baseline estimation with asymmetric least squares smoothing (Eilers and Boelens, 2005).

@@ -14,7 +14,7 @@ A lightweight, dependency-free toolbox for pre-processing XY data from experimen
 \tabular{ll}{
 \strong{Package:} \tab alkahest \cr
 \strong{Type:} \tab Package \cr
-\strong{Version:} \tab 1.2.0 \cr
+\strong{Version:} \tab 1.3.0 \cr
 \strong{License:} \tab GPL-3 \cr
 \strong{Zenodo:} \tab \doi{10.5281/zenodo.7081524} \cr
 }
@@ -22,9 +22,9 @@ A lightweight, dependency-free toolbox for pre-processing XY data from experimen
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://codeberg.org/tesselle/alkahest}
   \item \url{https://packages.tesselle.org/alkahest/}
-  \item \url{https://github.com/tesselle/alkahest}
-  \item Report bugs at \url{https://github.com/tesselle/alkahest/issues}
+  \item Report bugs at \url{https://codeberg.org/tesselle/alkahest/issues}
 }
 
 }

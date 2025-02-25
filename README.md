@@ -5,9 +5,6 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/tesselle/alkahest/workflows/R-CMD-check/badge.svg)](https://github.com/tesselle/alkahest/actions)
-[![codecov](https://codecov.io/gh/tesselle/alkahest/branch/main/graph/badge.svg?token=wsIkAQ0XFK)](https://app.codecov.io/gh/tesselle/alkahest)
-[![CodeFactor](https://www.codefactor.io/repository/github/tesselle/alkahest/badge/main)](https://www.codefactor.io/repository/github/tesselle/alkahest/overview/main)
 [![Dependencies](https://tinyverse.netlify.app/badge/alkahest)](https://cran.r-project.org/package=alkahest)
 
 <a href="https://tesselle.r-universe.dev" class="pkgdown-devel"><img
@@ -15,7 +12,7 @@ src="https://tesselle.r-universe.dev/badges/alkahest"
 alt="r-universe" /></a>
 <a href="https://cran.r-project.org/package=alkahest"
 class="pkgdown-release"><img
-src="http://www.r-pkg.org/badges/version/alkahest"
+src="https://www.r-pkg.org/badges/version/alkahest"
 alt="CRAN Version" /></a> <a
 href="https://cran.r-project.org/web/checks/check_results_alkahest.html"
 class="pkgdown-release"><img
@@ -23,7 +20,7 @@ src="https://badges.cranchecks.info/worst/alkahest.svg"
 alt="CRAN checks" /></a>
 <a href="https://cran.r-project.org/package=alkahest"
 class="pkgdown-release"><img
-src="http://cranlogs.r-pkg.org/badges/alkahest"
+src="https://cranlogs.r-pkg.org/badges/alkahest"
 alt="CRAN Downloads" /></a>
 
 [![Project Status: Active – The project has reached a stable, usable
@@ -54,10 +51,10 @@ integration and peaks detection.
 
 To cite alkahest in publications use:
 
-Frerebeau N (2024). *alkahest: Pre-Processing XY Data from Experimental
+Frerebeau N (2025). *alkahest: Pre-Processing XY Data from Experimental
 Methods*. Université Bordeaux Montaigne, Pessac, France.
 <doi:10.5281/zenodo.7081524> <https://doi.org/10.5281/zenodo.7081524>, R
-package version 1.2.0, <https://packages.tesselle.org/alkahest/>.
+package version 1.3.0, <https://packages.tesselle.org/alkahest/>.
 
 This package is a part of the tesselle project
 <https://www.tesselle.org>.
@@ -71,11 +68,11 @@ You can install the released version of **alkahest** from
 install.packages("alkahest")
 ```
 
-And the development version from [GitHub](https://github.com/) with:
+And the development version from [Codeberg](https://codeberg.org/) with:
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("tesselle/alkahest")
+remotes::install_git("https://codeberg.org/tesselle/alkahest")
 ```
 
 ## Usage
@@ -144,6 +141,15 @@ contributing to this project, you agree to abide by its terms.
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0">
+
+<div id="ref-barnes1989" class="csl-entry">
+
+Barnes, R. J., M. S. Dhanoa, and Susan J. Lister. 1989. “Standard Normal
+Variate Transformation and De-Trending of Near-Infrared Diffuse
+Reflectance Spectra.” *Applied Spectroscopy* 43 (5): 772–77.
+<https://doi.org/10.1366/0003702894202201>.
+
+</div>
 
 <div id="ref-derooi2014" class="csl-entry">
 
